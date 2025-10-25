@@ -30,7 +30,7 @@ class Main {
     document.body.appendChild(this.app.canvas);
 
     this.addPlane()
-    //this.addAirport()
+    this.addAirport()
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
@@ -67,7 +67,7 @@ class Main {
     }
 
     const location : number[] = [getRandom(screen_bounds_min[0], screen_bounds_max[0]), getRandom(screen_bounds_min[1], screen_bounds_max[1])];
-    let airport = new Airport(location[0],location[1]);
+    let airport = new Airport(location[0],location[1], 0.5);
     this.airports.push(airport)
     this.app.stage.addChild(airport);
   }
