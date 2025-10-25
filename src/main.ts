@@ -7,7 +7,7 @@ import {airportLocations} from "./Airport-locations.ts";
 // every how many frame(-ish) to spawn a new plane in
 const NEW_PLANE_FREQUENCY = 100;
 // max planes?
-const MAX_NUMBER_OF_PLAINS = 10;
+const MAX_NUMBER_OF_PLANES = 10;
 
 class Main {
   app: Application;
@@ -54,7 +54,7 @@ class Main {
       // reset new plane cum
       this.new_plane_cum = 0;
       // only spawn the new plane if max number has not been reached
-      if (this.planes.length < MAX_NUMBER_OF_PLAINS) {
+      if (this.planes.length < MAX_NUMBER_OF_PLANES) {
         this.addPlane();
       }
     }
