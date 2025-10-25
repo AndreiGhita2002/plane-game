@@ -129,12 +129,12 @@ export class Plane extends Sprite {
       // update position
       this.x += this.velocity[0] * time.deltaTime;
       this.y += this.velocity[1] * time.deltaTime;
+    }
 
-      // if Plane is over Airport; start landing
-      let d = Math.abs(vector_magnitude([this.x, this.y]) - vector_magnitude(this.goal));
-      if (d < AIRPORT_RANGE) {
-        this.landing = true;
-      }
+    // if Plane is over Airport; start landing
+    let d = Math.abs(vector_magnitude([this.x, this.y]) - vector_magnitude(this.goal));
+    if (d < AIRPORT_RANGE) {
+      this.landing = true;
     }
 
     // set rotation
