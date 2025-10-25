@@ -5,13 +5,10 @@ body {
 }
 
 div#app {
-    flex: 1;
-    height: 10%;
+    height: 10em;
     content: "Error 404: ";
 }
-div#pixi-container{
-    height: 90%;
-}
+
 canvas {
     height: calc(100% - 10em);
 }
