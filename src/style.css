@@ -1,5 +1,14 @@
+body {
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+}
+
+div#app {
+    height: 10em;
+    content: "Error 404: ";
+}
+
 canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+    height: calc(100% - 10em);
 }

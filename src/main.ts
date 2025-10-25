@@ -24,8 +24,9 @@ class Main {
     await Plane.preload();
     await Airport.preload();
 
+    const height = window.innerHeight - 160;
     // Initialize the application.
-    await this.app.init({ background: '#1099bb', resizeTo: window });
+    await this.app.init({ background: '#1099bb', width: window.innerWidth, height: height });
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
