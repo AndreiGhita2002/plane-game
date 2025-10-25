@@ -16,7 +16,7 @@ import {Plane} from "./Plane.ts";
   document.body.appendChild(app.canvas);
 
   // Create a new Sprite from an image path.
-  const plane = new Plane(app.screen.width / 2, app.screen.height / 2);
+  const plane = new Plane(app.screen.width, app.screen.height);
 
   // Add to stage.
   app.stage.addChild(plane);
@@ -29,6 +29,6 @@ import {Plane} from "./Plane.ts";
      * Here we use deltaTime, which is the time elapsed between the frame callbacks
      * to create frame-independent transformation. Keeping the speed consistent.
      */
-    plane.rotation += 0.1 * time.deltaTime;
+    plane.update(time);
   });
 })();
