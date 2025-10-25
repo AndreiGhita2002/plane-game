@@ -90,6 +90,7 @@ export class Plane extends Sprite {
     this.y += this.velocity[1] * time.deltaTime;
   }
 
+  //TODO call this when used has made a move
   change_path(goal_x: number, goal_y: number) {
     this.goal = [goal_x, goal_y];
     this.pathfind_mode = 1;
