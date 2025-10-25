@@ -1,4 +1,4 @@
-import {Application, Ticker, RenderLayer} from 'pixi.js';
+import {Application, Ticker} from 'pixi.js';
 import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
 import {airportLocations} from "./Airport-locations.ts";
@@ -8,13 +8,10 @@ const NEW_PLANE_FREQUENCY = 100;
 // max planes?
 const MAX_NUMBER_OF_PLAINS = 10;
 
-let foregroundLayer = new RenderLayer();
-
 class Main {
   app: Application;
   planes: Plane[] = [];
   airports: Airport[] =[];
-
   new_plane_cum = 0;
 
   constructor() {
@@ -26,19 +23,23 @@ class Main {
     await Plane.preload();
     await Airport.preload();
 
-    const height = window.innerHeight - 160;
+    const width = window.innerWidth;
+    const height = window.innerHeight * 0.9;
+    const container = document.getElementById("pixi-container");
     // Initialize the application.
-    await this.app.init({ background: '#1099bb', width: window.innerWidth, height: height });
+    if(container){
+      await this.app.init({ background: '#1099bb',width , height, resizeTo: container});
+    }
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
-    this.app.stage.addChild(foregroundLayer);
-
-    this.addPlane(foregroundLayer, 1)
-    this.addAirport(foregroundLayer, 0)
+    this.addPlane()
+    this.addAirport()
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
+
+    window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
   }
 
   mainLoop(time: Ticker) {
@@ -49,7 +50,7 @@ class Main {
       this.new_plane_cum = 0;
       // only spawn the new plane if max number has not been reached
       if (this.planes.length < MAX_NUMBER_OF_PLAINS) {
-        this.addPlane(foregroundLayer, 1)
+        this.addPlane();
       }
     }
 
@@ -57,24 +58,28 @@ class Main {
     this.planes.forEach((p) => p.update(time));
   }
 
-  addPlane(layer : RenderLayer, zindex: number) {
+  addPlane() {
     // push to plane array
     let plane = new Plane(this.app.screen.width, this.app.screen.height)
     this.planes.push(plane);
     // add to stage.
-    layer.addChildAt(plane,zindex);
+    this.app.stage.addChild(plane);
   }
-  addAirport(layer: RenderLayer, zindex: number){
-    airportLocations(screen.width,screen.height).forEach((coord ) =>{
+  addAirport(){
+    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) =>{
       let airport = new Airport(coord[0],coord[1], 0.5);
       this.airports.push(airport)
-      layer.addChildAt(airport, zindex);
+      this.app.stage.addChild(airport);
     })
   }
+
   // todo call this from somewhere
   resize(new_width: number, new_height: number) {
-    this.planes.forEach((p) => p.resize(new_width, new_height));
+    //this.planes.forEach((p) => p.resize(new_width, new_height));
+    const coords = airportLocations(new_width,new_height);
+    this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
   }
+
 }
 
 // Asynchronous IIFE
