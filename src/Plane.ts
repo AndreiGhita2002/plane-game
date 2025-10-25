@@ -2,7 +2,7 @@ import {Assets, Sprite, Texture, Ticker} from 'pixi.js';
 import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
 
-const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
+// const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
 const PLANE_MIN_SPAWN_SPEED = 1;
 const PLANE_MAX_SPAWN_SPEED = 3;
 const TURNING_SPEED = 2; // in radians for some reason
@@ -31,6 +31,7 @@ function get_unit_vector(v: [number, number]): [number, number] {
 
 export class Plane extends Sprite {
   static plane_texture: Texture;
+  static plane_textures: Texture[];
 
   to_delete: boolean = false;
 
@@ -50,8 +51,11 @@ export class Plane extends Sprite {
   sin_i: number = 0;
 
   static async preload() {
-    // load asset
-    Plane.plane_texture = await Assets.load(PLANE_URL);
+    Plane.plane_textures = new Array<Texture>(7);
+    // load assets
+    for (let i = 0; i < 7; i++) {
+      Plane.plane_textures[i] = await Assets.load(`/sprite/planes/${i}.svg`);
+    }
   }
 
   update(time: Ticker) {
@@ -122,8 +126,8 @@ export class Plane extends Sprite {
     this.max_y = new_height;
   }
 
-  constructor(max_x: number, max_y: number) {
-    super(Plane.plane_texture);
+  constructor(max_x: number, max_y: number, color: number) {
+    super(Plane.plane_textures[color]);
 
     this.anchor.set(0.5);
     this.max_x = max_x;
@@ -175,6 +179,8 @@ export class Plane extends Sprite {
     this.pathfind_mode = 0;
     this.goal = [0, 0];
     this.goal_direction = get_unit_vector(this.velocity);
+
+    this.scale.set(0.1);
 
     // Adding listeners
     this.eventMode = "dynamic";

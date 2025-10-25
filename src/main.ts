@@ -67,10 +67,11 @@ export class Main {
     this.planes = this.planes.filter((p) => !p.to_delete);
   }
 
+  // todo LINK PLANES AND AIRPORTS
+
   addPlane() {
     // push to plane array
-    let plane = new Plane(this.app.screen.width, this.app.screen.height);
-
+    let plane = new Plane(this.app.screen.width, this.app.screen.height, Math.floor(Math.random() * 6))
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
