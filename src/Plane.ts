@@ -8,7 +8,7 @@ const PLANE_MAX_SPAWN_SPEED = 5;
 export class Plane extends Sprite {
   static plane_texture: Texture;
 
-  max_x: number;
+  max_x: number; //TODO on resize edit these of every plane
   max_y: number;
 
   x_velocity: number;
