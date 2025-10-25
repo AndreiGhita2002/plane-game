@@ -8,11 +8,12 @@ const PLANE_MAX_SPAWN_SPEED = 5;
 export class Plane extends Sprite {
   static plane_texture: Texture;
 
-  max_x: number; //TODO on resize edit these of every plane
+  to_delete: boolean = false;
+
+  max_x: number;
   max_y: number;
 
-  x_velocity: number;
-  y_velocity: number;
+  velocity: [number, number];
 
   static async preload() {
     // load asset
@@ -20,13 +21,16 @@ export class Plane extends Sprite {
   }
 
   update(time: Ticker) {
-    this.x += this.x_velocity * time.deltaTime;
-    this.y += this.y_velocity * time.deltaTime;
+    // if it is time to pathfind:
+    // this.pathfind()
 
-    if (this.x < 0) this.x += this.max_x;
-    if (this.y < 0) this.y += this.max_y;
-    if (this.x > this.max_x) this.x -= this.max_x;
-    if (this.y > this.max_x) this.y -= this.max_y;
+    this.x += this.velocity[0] * time.deltaTime;
+    this.y += this.velocity[1] * time.deltaTime;
+
+    if (this.x < 0) this.to_delete = true;
+    if (this.y < 0) this.to_delete = true;
+    if (this.x > this.max_x) this.to_delete = true;
+    if (this.y > this.max_x) this.to_delete = true;
   }
 
   resize(new_width: number, new_height: number) {
@@ -40,50 +44,62 @@ export class Plane extends Sprite {
     this.max_x = max_x;
     this.max_y = max_y;
 
-    this.x_velocity = 0;
-    this.y_velocity = 0;
+    this.velocity = [0, 0];
 
-    let vel = PLANE_MIN_SPAWN_SPEED + getRandomInt(PLANE_MAX_SPAWN_SPEED - PLANE_MIN_SPAWN_SPEED);
+    let vel = getRandomInt(PLANE_MIN_SPAWN_SPEED, PLANE_MAX_SPAWN_SPEED);
     let angle = Math.random() * Math.PI;
 
     // clamp angle
-    const angle_limit = 0.523599; // 30 degrees in radians
+    const angle_limit = 1.22173; // 70 degrees in radians
     if (angle < angle_limit) {angle = angle_limit;}
     if (angle > Math.PI - angle_limit) {angle = Math.PI - angle_limit;}
 
-    let edge: number = getRandomInt(4);
+    let edge: number = getRandomInt(0, 4);
     if (edge == 0) {
       // north
-      this.x = getRandomInt(max_x);
+      let base = max_y / Math.tan(angle_limit)
+      this.x = getRandomInt(base, max_x - base);
       this.y = 0;
 
-      // this.y_velocity = vel;
-      this.x_velocity = Math.cos(angle) * vel;
-      this.y_velocity = Math.sin(angle) * vel;
+      this.velocity = [Math.cos(angle) * vel, Math.sin(angle) * vel];
+
     }
     if (edge == 1) {
       // east
+      let base = max_x / Math.tan(angle_limit)
       this.x = max_x
-      this.y = getRandomInt(max_y);
+      this.y = getRandomInt(base, max_y - base);
 
-      this.x_velocity = -Math.sin(angle) * vel;
-      this.y_velocity = Math.cos(angle) * vel;
+      this.velocity = [-Math.sin(angle) * vel, Math.cos(angle) * vel];
     }
     if (edge == 2) {
       // south
-      this.x = getRandomInt(max_x);
+      let base = max_y / Math.tan(angle_limit)
+      this.x = getRandomInt(base, max_x - base);
       this.y = max_y;
 
-      this.x_velocity = Math.cos(angle) * vel;
-      this.y_velocity = -Math.sin(angle) * vel;
+      this.velocity = [Math.cos(angle) * vel, -Math.sin(angle) * vel];
     }
     if (edge == 3) {
       // west
+      let base = max_x / Math.tan(angle_limit)
       this.x = 0;
-      this.y = getRandomInt(max_y);
+      this.y = getRandomInt(base, max_y - base);
 
-      this.x_velocity = Math.sin(angle) * vel;
-      this.y_velocity = Math.cos(angle) * vel;
+      this.velocity = [Math.sin(angle) * vel, Math.cos(angle) * vel];
     }
   }
+
+  // Pathfinding information
+  // pathfind_mode: number; // 0 - initial, 1 - player set
+  // overall_direction: [number, number]
+  // goal: [number, number]
+  //
+  // pathfind() {
+  //   if (this.pathfind_mode == 0) {
+  //     // initial edge-to-edge travel
+  //   } else {
+  //     // player set travel
+  //   }
+  // }
 }

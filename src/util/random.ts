@@ -1,5 +1,5 @@
 
-// Generates a random int in the range [inclusive 0, exclusive max)
-export function getRandomInt(max: number): number {
-  return Math.floor(Math.random() * max);
+// Generates a random int in the range [inclusive min, exclusive max)
+export function getRandomInt(min: number, max: number): number {
+  return min + Math.floor(Math.random() * (max - min));
 }

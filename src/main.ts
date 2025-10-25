@@ -26,7 +26,7 @@ class Main {
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
 
-    this.addPlane()
+    this.addPlane();
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
