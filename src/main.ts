@@ -1,34 +1,44 @@
 import { Application } from 'pixi.js';
-import {Plane} from "./Plane.ts";
+import { Plane } from "./Plane.ts";
+
+class Main {
+  app: Application;
+  planes: Plane[] = [];
+
+  constructor() {
+    this.app = new Application()
+  }
+
+  async run() {
+    // Preload assets
+    await Plane.preload();
+
+    // Initialize the application.
+    await this.app.init({ background: '#1099bb', resizeTo: window });
+
+    // Then adding the application's canvas to the DOM body.
+    document.body.appendChild(this.app.canvas);
+
+    this.addPlane()
+
+    // Add an animation loop callback to the application's ticker.
+    this.app.ticker.add((time) => {
+      this.planes.forEach((p) => p.update(time));
+    });
+  }
+
+  addPlane() {
+    // push to plane array
+    let plane = new Plane(this.app.screen.width, this.app.screen.height)
+    this.planes.push(plane);
+    // add to stage.
+    this.app.stage.addChild(plane);
+  }
+}
 
 // Asynchronous IIFE
 (async () => {
   // Create a PixiJS application.
-  const app = new Application();
-
-  // Preload assets
-  await Plane.preload();
-
-  // Initialize the application.
-  await app.init({ background: '#1099bb', resizeTo: window });
-
-  // Then adding the application's canvas to the DOM body.
-  document.body.appendChild(app.canvas);
-
-  // Create a new Sprite from an image path.
-  const plane = new Plane(app.screen.width, app.screen.height);
-
-  // Add to stage.
-  app.stage.addChild(plane);
-
-  // Add an animation loop callback to the application's ticker.
-  app.ticker.add((time) => {
-    /**
-     * Just for fun, let's rotate mr rabbit a little.
-     * Time is a Ticker object which holds time related data.
-     * Here we use deltaTime, which is the time elapsed between the frame callbacks
-     * to create frame-independent transformation. Keeping the speed consistent.
-     */
-    plane.update(time);
-  });
+  let main = new Main();
+  main.run();
 })();
