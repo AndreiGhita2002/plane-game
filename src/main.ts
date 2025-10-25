@@ -113,7 +113,7 @@ function sleep(seconds: number) {
 
 async function waitAndPlay(timeToWait: number) {
   await sleep(timeToWait);
-  sound.play("background")
+  sound.play("background", {loop: true});
 }
 
 // Asynchronous IIFE
