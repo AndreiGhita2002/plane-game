@@ -2,7 +2,6 @@ import {Assets, Sprite, Texture, Ticker} from 'pixi.js';
 import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
 
-// const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
 const PLANE_MIN_SPAWN_SPEED = 0.5;
 const PLANE_MAX_SPAWN_SPEED = 1.7;
 const SIN_INCREMENT = 0.05;
@@ -35,7 +34,6 @@ export function direction_closeness(v1: [number, number], v2: [number, number]):
 
 
 export class Plane extends Sprite {
-  static plane_texture: Texture;
   static plane_textures: Texture[];
 
   to_delete: boolean = false;

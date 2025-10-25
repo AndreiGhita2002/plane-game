@@ -3,6 +3,7 @@ import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
 import {Map} from "./Map.ts";
 import {airportLocations} from "./Airport-locations.ts";
+import { sound } from '@pixi/sound';
 
 // every how many frame(-ish) to spawn a new plane in
 const NEW_PLANE_FREQUENCY = 100;
@@ -30,8 +31,11 @@ export class Main {
     await Airport.preload();
     await Map.preload();
 
+    sound.add('background', '/sounds/background.mp3');
+    waitAndPlay(7);
+
     const width = window.innerWidth;
-    const height = window.innerHeight * 0.9;
+    const height = window.innerHeight - 220;
     const container = document.getElementById("pixi-container");
     // Initialize the application.
     if(container){
@@ -47,8 +51,8 @@ export class Main {
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
 
-    // Move elements to accommodate for resize
-    window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
+    // Move elements to accommodate for resize NOOOO
+    // window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
   }
 
   mainLoop(time: Ticker) {
@@ -83,7 +87,7 @@ export class Main {
 
   addAirport(){
     airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) =>{
-      let airport = new Airport(coord[0],coord[1], 0.5);
+      let airport = new Airport(coord[0],coord[1], 0.1, Math.floor(Math.random() * 7));
       this.airports.push(airport)
       this.app.stage.addChild(airport);
     })
@@ -101,6 +105,15 @@ export class Main {
     const coords = airportLocations(new_width,new_height);
     this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
   }
+}
+
+function sleep(seconds: number) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}
+
+async function waitAndPlay(timeToWait: number) {
+  await sleep(timeToWait);
+  sound.play("background")
 }
 
 // Asynchronous IIFE

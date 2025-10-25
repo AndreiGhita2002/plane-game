@@ -3,15 +3,21 @@ import {Main} from "./main.ts";
 
 export class Airport extends Sprite {
 
-    static airport_texture : Texture;
-    static async preload(){
+    static airport_textures : Texture[];
+
+    static async preload() {
       // @ts-ignore
-      Airport.airport_texture = await Assets.load("sprite/airport.svg", {resolution: 4});
+      Airport.airport_textures = new Array<Texture>(7);
+        // load assets
+        for (let i = 0; i < 7; i++) {
+            Airport.airport_textures[i] = await Assets.load(`/sprite/airports/${i}.svg`);
+        }
     }
-    constructor(x: number, y: number, scale:number){
-       super(Airport.airport_texture);
-       this.scale.set(scale)
-       this.position.set(x,y)
+    constructor(x: number, y: number, scale:number, color: number){
+       super(Airport.airport_textures[color]);
+       this.scale.set(scale);
+       this.position.set(x,y);
+       this.anchor.set(0.5);
 
       // Adding listeners
       this.eventMode = "dynamic";
