@@ -1,11 +1,18 @@
-import { Application } from 'pixi.js';
+import {Application, Ticker} from 'pixi.js';
 import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
+
+// every how many frame(-ish) to spawn a new plane in
+const NEW_PLANE_FREQUENCY = 100;
+// max planes?
+const MAX_NUMBER_OF_PLAINS = 10;
 
 class Main {
   app: Application;
   planes: Plane[] = [];
   airports: Airport[] =[];
+
+  new_plane_cum = 0;
 
   constructor() {
     this.app = new Application()
@@ -26,9 +33,23 @@ class Main {
     //this.addAirport()
 
     // Add an animation loop callback to the application's ticker.
-    this.app.ticker.add((time) => {
-      this.planes.forEach((p) => p.update(time));
-    });
+    this.app.ticker.add(t => this.mainLoop(t));
+  }
+
+  mainLoop(time: Ticker) {
+    // New planes
+    this.new_plane_cum += time.deltaTime;
+    if (this.new_plane_cum > NEW_PLANE_FREQUENCY) {
+      // reset new plane cum
+      this.new_plane_cum = 0;
+      // only spawn the new plane if max number has not been reached
+      if (this.planes.length < MAX_NUMBER_OF_PLAINS) {
+        this.addPlane()
+      }
+    }
+
+    // Plane update
+    this.planes.forEach((p) => p.update(time));
   }
 
   addPlane() {
