@@ -10,7 +10,6 @@ div#app {
     content: "Error 404: ";
 }
 div#pixi-container{
-    flex: 1;
     height: 90%;
 }
 canvas {
