@@ -2,14 +2,15 @@ import {Assets, Sprite, Texture, Ticker} from 'pixi.js';
 import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
 
-const PLANE_MIN_SPAWN_SPEED = 0.5;
-const PLANE_MAX_SPAWN_SPEED = 1.9;
+const PLANE_MIN_SPAWN_SPEED = 0.7;
+const PLANE_MAX_SPAWN_SPEED = 1.8;
 const SIN_INCREMENT = 0.05;
 const SIN_WAVELENGTH = 0.3;
-const GOAL_SPEEDUP = 2;
+const GOAL_SPEEDUP = 2.5;
 const PLANE_SPAWN_SIZE = 0.1;
-const LANDING_SCALE_DOWN = 0.01; // how much to decrease scale by each frame
-const LANDING_FADE_OUT = 0.008;
+const LANDING_SCALE_DOWN = 0.02; // how much to decrease scale by each frame
+const LANDING_FADE_OUT = 0.01;
+const AIRPORT_RANGE = 90;
 
 
 export function dot_product(v1: [number, number], v2: [number, number]): number {
@@ -76,6 +77,7 @@ export class Plane extends Sprite {
       if (this.y > this.max_y) this.to_delete = true;
       if (this.to_delete) {
         this.destroy();
+        Main.lives -= 1;
         return;
       }
 
@@ -124,11 +126,15 @@ export class Plane extends Sprite {
       // }
       // else: no course correction needs to be done
 
-      //todo if Plane is over Airport code here
-
       // update position
       this.x += this.velocity[0] * time.deltaTime;
       this.y += this.velocity[1] * time.deltaTime;
+
+      // if Plane is over Airport; start landing
+      let d = Math.abs(vector_magnitude([this.x, this.y]) - vector_magnitude(this.goal));
+      if (d < AIRPORT_RANGE) {
+        this.landing = true;
+      }
     }
 
     // set rotation
@@ -145,6 +151,7 @@ export class Plane extends Sprite {
 
       if (this.scale.x < 0.0 || this.scale.x < 0.0) {
         this.to_delete = true;
+        Main.score += 1;
       }
     }
   }
