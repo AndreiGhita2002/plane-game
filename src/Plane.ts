@@ -4,8 +4,14 @@ import {getRandomInt} from "./util/random.ts";
 const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
 const PLANE_MIN_SPAWN_SPEED = 1;
 const PLANE_MAX_SPAWN_SPEED = 5;
-const MAGIC_NUMBER = 1;
-const SIN_INCREMENT = Math.PI / 100;
+const TURNING_SPEED = 2; // in radians for some reason
+const CLOSE_ENOUGH_DOT = 0.1;
+
+
+function dot_product(v1: [number, number], v2: [number, number]): number {
+  return v1[0] * v2[0] + v2[1] * v2[1];
+}
+
 
 export class Plane extends Sprite {
   static plane_texture: Texture;
@@ -23,6 +29,8 @@ export class Plane extends Sprite {
   // for pathfind_mode==1:
   goal: [number, number];
   turning: boolean = false;
+  turning_dir: number = 0; // either -1 or +1
+  goal_direction: [number, number];
 
   static async preload() {
     // load asset
@@ -48,8 +56,17 @@ export class Plane extends Sprite {
       // this.sin_i += SIN_INCREMENT;
     } else {
       // player has chosen a destination
-      if (this.turning) {
-
+      if (this.turning) { //TODO test this
+        // this.angle = Math.acos(this.velocity[0]);
+        this.angle += TURNING_SPEED * this.turning_dir;
+        let new_vel: [number, number] = [Math.cos(this.angle), Math.sin(this.angle)];
+        // check if turn has been enough
+        if (dot_product(new_vel, this.goal_direction) < CLOSE_ENOUGH_DOT) {
+          // just set new_vel to direction
+          this.velocity = this.goal_direction;
+        } else {
+          this.velocity = new_vel;
+        }
       }
       // else: no course correction needs to be done
 
@@ -65,6 +82,10 @@ export class Plane extends Sprite {
     this.goal = [goal_x, goal_y];
     this.pathfind_mode = 1;
     this.turning = true;
+
+    // calculate turning dir
+    let dot = this.goal[0] * (-this.velocity[1]) + this.goal[1] * this.velocity[0];
+    this.turning_dir = dot > 0 ? 1 : -1;
   }
 
   resize(new_width: number, new_height: number) {
@@ -122,7 +143,7 @@ export class Plane extends Sprite {
       this.velocity = [Math.sin(angle) * this.speed, Math.cos(angle) * this.speed];
     }
     this.pathfind_mode = 0;
-    this.overall_direction = this.velocity
-    this.goal = [0, 0]
+    this.goal = [0, 0];
+    this.goal_direction = [Math.sin(angle), Math.cos(angle)];
   }
 }
