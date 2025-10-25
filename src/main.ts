@@ -16,6 +16,7 @@ export class Main {
   // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
+  current_plane = 0;
 
   static selected_plane: Plane | null = null;
 
@@ -70,11 +71,14 @@ export class Main {
   // todo LINK PLANES AND AIRPORTS
 
   addPlane() {
+
     // push to plane array
-    let plane = new Plane(this.app.screen.width, this.app.screen.height, Math.floor(Math.random() * 6))
+    let plane = new Plane(this.app.screen.width, this.app.screen.height, this.current_plane)
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
+    if (this.current_plane == 7) {this.current_plane = 0}
+    else {this.current_plane += 1;}
   }
 
   addAirport(){
