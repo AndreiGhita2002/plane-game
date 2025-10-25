@@ -25,7 +25,7 @@ class Main {
 
     const height = window.innerHeight - 160;
     // Initialize the application.
-    await this.app.init({ background: '#1099bb', width: window.innerWidth, height: height });
+    await this.app.init({ background: '#1099bb', resizeTo: window });
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
