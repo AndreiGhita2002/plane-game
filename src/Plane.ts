@@ -35,7 +35,7 @@ export function direction_closeness(v1: [number, number], v2: [number, number]):
 
 export class Plane extends Sprite {
   static plane_textures: Texture[];
-
+  colour: number;
   to_delete: boolean = false;
 
   max_x: number;
@@ -154,6 +154,8 @@ export class Plane extends Sprite {
 
   constructor(max_x: number, max_y: number, color: number) {
     super(Plane.plane_textures[color]);
+
+    this.colour = color;
 
     this.anchor.set(0.5);
     this.max_x = max_x;

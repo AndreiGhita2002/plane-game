@@ -2,8 +2,9 @@ import {Assets, Sprite, Texture} from 'pixi.js';
 import {Main} from "./main.ts";
 
 export class Airport extends Sprite {
-
     static airport_textures : Texture[];
+
+    colour: number;
 
     static async preload() {
       // @ts-ignore
@@ -15,6 +16,7 @@ export class Airport extends Sprite {
     }
     constructor(x: number, y: number, scale:number, color: number){
        super(Airport.airport_textures[color]);
+       this.colour = color;
        this.scale.set(scale);
        this.position.set(x,y);
        this.anchor.set(0.5);
