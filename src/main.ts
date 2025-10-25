@@ -35,7 +35,7 @@ export class Main {
     const container = document.getElementById("pixi-container");
     // Initialize the application.
     if(container){
-      await this.app.init({ background: 'transparent',width , height, resizeTo: container});
+      await this.app.init({ backgroundAlpha: 0.1, background: 'transparent',  width , height, resizeTo: container});
     }
 
     // Then adding the application's canvas to the DOM body.
