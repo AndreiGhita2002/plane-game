@@ -13,6 +13,7 @@ class Main {
   app: Application;
   planes: Plane[] = [];
   airports: Airport[] =[];
+  // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
 
