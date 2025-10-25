@@ -13,7 +13,7 @@ const MAX_NUMBER_OF_PLANES = 7;
 export class Main {
   app: Application;
   planes: Plane[] = [];
-  airports: Airport[] =[];
+  static airports: Airport[] = [];
   // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
@@ -48,9 +48,9 @@ export class Main {
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
-    this.addPlane()
-    this.addAirport()
     this.addMap()
+    this.addAirports()
+    this.addPlane()
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
@@ -89,11 +89,11 @@ export class Main {
     else {this.current_plane += 1;}
   }
 
-  addAirport(){
+  addAirports(){
     let current_airport: number = 0;
-    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) =>{
+    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) => {
       let airport = new Airport(coord[0],coord[1], 0.1, current_airport);
-      this.airports.push(airport)
+      Main.airports.push(airport)
       this.app.stage.addChild(airport);
       current_airport += 1;
     })
@@ -109,7 +109,7 @@ export class Main {
   resize(new_width: number, new_height: number) {
     //this.planes.forEach((p) => p.resize(new_width, new_height));
     const coords = airportLocations(new_width,new_height);
-    this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
+    Main.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
   }
 }
 

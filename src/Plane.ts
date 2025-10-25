@@ -11,6 +11,7 @@ const PLANE_SPAWN_SIZE = 0.1;
 const LANDING_SCALE_DOWN = 0.02; // how much to decrease scale by each frame
 const LANDING_FADE_OUT = 0.01;
 const AIRPORT_RANGE = 90;
+const AUTOLAND_RANGE = 50;
 
 
 export function dot_product(v1: [number, number], v2: [number, number]): number {
@@ -34,6 +35,12 @@ export function direction_closeness(v1: [number, number], v2: [number, number]):
   let dot = dot_product(v1, v2);
   let closeness = dot / (vector_magnitude(v1) * vector_magnitude(v2));
   return Math.min(Math.max(closeness, -1), 1);
+}
+
+export function vector_dist(v1: [number, number], v2: [number, number]): number {
+  let dx = v1[0] - v2[0];
+  let dy = v1[1] - v2[1];
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
 
@@ -132,9 +139,13 @@ export class Plane extends Sprite {
     }
 
     // if Plane is over Airport; start landing
-    let d = Math.abs(vector_magnitude([this.x, this.y]) - vector_magnitude(this.goal));
-    if (d < AIRPORT_RANGE) {
+    let d = vector_dist([this.x, this.y], this.goal);
+    if ((d < AIRPORT_RANGE && this.pathfind_mode == 1) || (d < AUTOLAND_RANGE && this.pathfind_mode == 0)) {
       this.landing = true;
+
+      if (this.pathfind_mode == 0) {
+        this.change_path(this.goal[0], this.goal[1]);
+      }
     }
 
     // set rotation
@@ -234,8 +245,16 @@ export class Plane extends Sprite {
       this.velocity = [Math.sin(angle) * this.speed, Math.cos(angle) * this.speed];
     }
     this.pathfind_mode = 0;
-    this.goal = [0, 0];
+
     this.goal_direction = get_unit_vector(this.velocity);
+
+    // Find goal airport
+    let goal_airport = Main.airports.find((airport) => airport.colour == this.colour);
+    if (goal_airport != undefined) {
+      this.goal = [goal_airport.x, goal_airport.y];
+    } else {
+      this.goal = [0, 0];
+    }
 
     this.scale.set(PLANE_SPAWN_SIZE);
 
