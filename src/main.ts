@@ -31,7 +31,7 @@ class Main {
     const container = document.getElementById("pixi-container");
     // Initialize the application.
     if(container){
-      await this.app.init({ background: '#1099bb',width , height, resizeTo: container});
+      await this.app.init({ background: 'transparent',width , height, resizeTo: container});
     }
 
     // Then adding the application's canvas to the DOM body.
@@ -89,8 +89,6 @@ class Main {
     //this.planes.forEach((p) => p.resize(new_width, new_height));
     const coords = airportLocations(new_width,new_height);
     this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
-    this.map.width = new_width;
-    this.map.height = new_height;
   }
 
 }
