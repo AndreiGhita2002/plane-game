@@ -68,7 +68,6 @@ export class Plane extends Sprite {
       }
 
       // calculate next position on the sine wave
-      // todo sin wave motion of planes
       this.sin_i += SIN_INCREMENT;
       let angle = vector_angle(this.velocity)
       let displacement: [number, number] = [
