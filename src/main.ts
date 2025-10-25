@@ -48,15 +48,6 @@ export class Main {
 
     // Move elements to accommodate for resize
     window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
-
-    // listener for release:
-    // this.app.stage.eventMode = "static";
-    // this.app.stage.cursor = "pointer";
-
-    // this.app.stage.onpointerup = (_event) => {
-    //   Main.selected_plane = null;
-    //   console.log("Plane deselected");
-    // };
   }
 
   mainLoop(time: Ticker) {
