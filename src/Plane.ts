@@ -101,7 +101,7 @@ export class Plane extends Sprite {
 
       // update position
       this.x += this.velocity[0] * time.deltaTime;
-      this.y += this.velocity[1] * time.deltaTime;type
+      this.y += this.velocity[1] * time.deltaTime;
     }
 
 
