@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/halcom');
+
 body {
     display: flex;
     margin: 0;
@@ -6,13 +8,34 @@ body {
 
 div#app {
     flex: 1;
-    height: 10%;
-    content: "Error 404: ";
+    height: 15%;
+    text-align: center;
 }
-div#pixi-container{
+
+div#pixl-container{
     flex: 1;
-    height: 90%;
+    height: 85%;
 }
 canvas {
-    height: calc(100% - 10em);
+    height: calc(100% - 15em);
+}
+
+#header {
+    max-width: 100%;
+}
+
+#colour-blend {
+    min-height: 100px;
+    min-width: 100%;
+    background: linear-gradient(white, #ccecff);
+}
+
+#error-title {
+    font-family: 'Halcom', sans-serif;
+    color: #334155;
+}
+
+#error-message {
+    font-family: 'Halcom', sans-serif;
+    color: #334155;    
 }
