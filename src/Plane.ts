@@ -6,10 +6,16 @@ const PLANE_MIN_SPAWN_SPEED = 1;
 const PLANE_MAX_SPAWN_SPEED = 5;
 const TURNING_SPEED = 2; // in radians for some reason
 const CLOSE_ENOUGH_DOT = 0.1;
+const SIN_INCREMENT = 0.05;
+const SIN_WAVELENGTH = 0.3;
 
 
 function dot_product(v1: [number, number], v2: [number, number]): number {
   return v1[0] * v2[0] + v2[1] * v2[1];
+}
+
+function vector_angle(v: [number, number]): number {
+  return Math.atan2(v[1], v[0]);
 }
 
 function vector_magnitude(v: [number, number]): number {
@@ -40,6 +46,7 @@ export class Plane extends Sprite {
   turning: boolean = false;
   turning_dir: number = 0; // either -1 or +1
   goal_direction: [number, number];
+  sin_i: number = 0;
 
   static async preload() {
     // load asset
@@ -62,10 +69,18 @@ export class Plane extends Sprite {
 
       // calculate next position on the sine wave
       // todo sin wave motion of planes
-      // let v = [
-      //   Math.cos()
-      // ]
-      // this.sin_i += SIN_INCREMENT;
+      this.sin_i += SIN_INCREMENT;
+      let angle = vector_angle(this.velocity)
+      let displacement: [number, number] = [
+        this.speed,
+        Math.sin(this.sin_i) * this.speed * SIN_WAVELENGTH
+      ]
+      displacement = [
+       displacement[0] * Math.cos(angle) + displacement[1] * Math.sin(angle),
+       displacement[0] * Math.sin(angle) + displacement[1] * Math.cos(angle)
+      ]
+      this.x += displacement[0]
+      this.y += displacement[1]
     } else {
       // player has chosen a destination
       if (this.turning) { //TODO test this
@@ -83,11 +98,13 @@ export class Plane extends Sprite {
       // else: no course correction needs to be done
 
       //todo if Plane is over Airport code here
+
+      // update position
+      this.x += this.velocity[0] * time.deltaTime;
+      this.y += this.velocity[1] * time.deltaTime;type
     }
 
-    // update position
-    this.x += this.velocity[0] * time.deltaTime;
-    this.y += this.velocity[1] * time.deltaTime;
+
   }
 
   //TODO call this when used has made a move
