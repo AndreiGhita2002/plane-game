@@ -89,6 +89,8 @@ class Main {
     //this.planes.forEach((p) => p.resize(new_width, new_height));
     const coords = airportLocations(new_width,new_height);
     this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
+    this.map.width = new_width;
+    this.map.height = new_height;
   }
 
 }
