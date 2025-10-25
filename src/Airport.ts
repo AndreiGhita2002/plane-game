@@ -17,7 +17,7 @@ export class Airport extends Sprite {
       this.cursor = "pointer";
 
       this.onpointerup = (_event) => {
-        if (Main.selected_plane) {
+        if (Main.selected_plane && !Main.selected_plane.destroyed) {
           // todo if plane and airport match
           console.log("Plane is released!")
 

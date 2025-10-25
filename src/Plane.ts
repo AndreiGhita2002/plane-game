@@ -3,29 +3,34 @@ import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
 
 // const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
-const PLANE_MIN_SPAWN_SPEED = 1;
-const PLANE_MAX_SPAWN_SPEED = 3;
-const TURNING_SPEED = 2; // in radians for some reason
-const CLOSE_ENOUGH_DOT = 0.1;
+const PLANE_MIN_SPAWN_SPEED = 0.5;
+const PLANE_MAX_SPAWN_SPEED = 1.7;
 const SIN_INCREMENT = 0.05;
 const SIN_WAVELENGTH = 0.3;
+const GOAL_SPEEDUP = 2;
 
 
-function dot_product(v1: [number, number], v2: [number, number]): number {
+export function dot_product(v1: [number, number], v2: [number, number]): number {
   return v1[0] * v2[0] + v2[1] * v2[1];
 }
 
-function vector_angle(v: [number, number]): number {
+export function vector_angle(v: [number, number]): number {
   return Math.atan2(v[1], v[0]);
 }
 
-function vector_magnitude(v: [number, number]): number {
-  return Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2));
+export function vector_magnitude(v: [number, number]): number {
+  return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
 }
 
-function get_unit_vector(v: [number, number]): [number, number] {
+export function get_unit_vector(v: [number, number]): [number, number] {
   let mag = vector_magnitude(v);
   return [v[0] / mag, v[1] / mag];
+}
+
+export function direction_closeness(v1: [number, number], v2: [number, number]): number {
+  let dot = dot_product(v1, v2);
+  let closeness = dot / (vector_magnitude(v1) * vector_magnitude(v2));
+  return Math.min(Math.max(closeness, -1), 1);
 }
 
 
@@ -45,8 +50,6 @@ export class Plane extends Sprite {
   pathfind_mode: number; // 0 - initial, 1 - player set
   // for pathfind_mode==1:
   goal: [number, number];
-  turning: boolean = false;
-  turning_dir: number = 0; // either -1 or +1
   goal_direction: [number, number];
   sin_i: number = 0;
 
@@ -80,25 +83,41 @@ export class Plane extends Sprite {
         Math.sin(this.sin_i) * this.speed * SIN_WAVELENGTH
       ]
       displacement = [
-       displacement[0] * Math.cos(angle) + displacement[1] * Math.sin(angle),
+       displacement[0] * Math.cos(angle) + displacement[1] * -Math.sin(angle),
        displacement[0] * Math.sin(angle) + displacement[1] * Math.cos(angle)
       ]
       this.x += displacement[0]
       this.y += displacement[1]
-    } else {
+    }
+    else {
+      // TODO make fancy turning
+
+      // const TURNING_SPEED = 0.01;
+      // const CLOSE_ENOUGH_DOT = 0.01; // out of 1
       // player has chosen a destination
-      if (this.turning) { //TODO test this
-        // this.angle = Math.acos(this.velocity[0]);
-        this.angle += TURNING_SPEED * this.turning_dir;
-        let new_vel: [number, number] = [Math.cos(this.angle), Math.sin(this.angle)];
-        // check if turn has been enough
-        if (dot_product(new_vel, this.goal_direction) < CLOSE_ENOUGH_DOT) {
-          // just set new_vel to direction
-          this.velocity = this.goal_direction;
-        } else {
-          this.velocity = new_vel;
-        }
-      }
+      // if (this.turning) {
+      //
+      //   let new_rot = this.rotation + TURNING_SPEED * time.deltaTime;
+      //   // let new_vel: [number, number] = [Math.cos(new_rot), -Math.sin(new_rot)];
+      //   // check if turn has been enough
+      //   // let closeness = direction_closeness(new_vel, this.goal_direction);
+      //
+      //   let closeness = this.goal_rot - this.rotation;
+      //
+      //   if (closeness > 2.0 * Math.PI - CLOSE_ENOUGH_DOT) {
+      //     console.log("close enough!")
+      //     // just set new_vel to direction
+      //     // this.velocity = [
+      //     //   this.goal_direction[0] * this.speed,
+      //     //   this.goal_direction[1] * this.speed,
+      //     // ];
+      //     this.rotation = this.goal_rot;
+      //     this.turning = false;
+      //   } else {
+      //     // console.log(closeness);
+      //     this.rotation = new_rot;
+      //   }
+      // }
       // else: no course correction needs to be done
 
       //todo if Plane is over Airport code here
@@ -114,11 +133,20 @@ export class Plane extends Sprite {
   change_path(goal_x: number, goal_y: number) {
     this.goal = [goal_x, goal_y];
     this.pathfind_mode = 1;
-    this.turning = true;
+    this.goal_direction = get_unit_vector([goal_x - this.x, goal_y - this.y]);
+    this.velocity = [
+      this.goal_direction[0] * this.speed * GOAL_SPEEDUP,
+      this.goal_direction[1] * this.speed * GOAL_SPEEDUP,
+    ];
+
+    // this.turning = true;
+    // this.goal_rot = vector_angle(this.goal_direction);
+    // if (this.goal_rot < this.rotation) this.goal_rot += 2.0 * Math.PI;
 
     // calculate turning dir
-    let dot = this.goal[0] * (-this.velocity[1]) + this.goal[1] * this.velocity[0];
-    this.turning_dir = dot > 0 ? 1 : -1;
+    // let dot = this.goal[0] * (-this.velocity[1]) + this.goal[1] * this.velocity[0];
+    // this.turning_dir = dot > 0 ? 1 : -1;
+    // this.turning_dir = 1;
   }
 
   resize(new_width: number, new_height: number) {
