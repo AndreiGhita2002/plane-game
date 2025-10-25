@@ -102,8 +102,11 @@ export class Plane extends Sprite {
       this.x += this.velocity[0] * time.deltaTime;
       this.y += this.velocity[1] * time.deltaTime;
     }
+    this.update_rotation();
+  }
 
-
+  update_rotation() {
+    this.rotation = vector_angle(this.velocity) + Math.PI / 2.0;
   }
 
   //TODO call this when used has made a move
