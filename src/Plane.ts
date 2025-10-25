@@ -3,10 +3,13 @@ import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
 
 const PLANE_MIN_SPAWN_SPEED = 0.5;
-const PLANE_MAX_SPAWN_SPEED = 1.7;
+const PLANE_MAX_SPAWN_SPEED = 1.9;
 const SIN_INCREMENT = 0.05;
 const SIN_WAVELENGTH = 0.3;
 const GOAL_SPEEDUP = 2;
+const PLANE_SPAWN_SIZE = 0.1;
+const LANDING_SCALE_DOWN = 0.01; // how much to decrease scale by each frame
+const LANDING_FADE_OUT = 0.008;
 
 
 export function dot_product(v1: [number, number], v2: [number, number]): number {
@@ -50,6 +53,9 @@ export class Plane extends Sprite {
   goal: [number, number];
   goal_direction: [number, number];
   sin_i: number = 0;
+
+  // set this to true when you want a plane to land
+  landing: boolean = false;
 
   static async preload() {
     Plane.plane_textures = new Array<Texture>(7);
@@ -124,7 +130,23 @@ export class Plane extends Sprite {
       this.x += this.velocity[0] * time.deltaTime;
       this.y += this.velocity[1] * time.deltaTime;
     }
+
+    // set rotation
     this.rotation = vector_angle(this.velocity) + Math.PI / 2.0;
+
+    // adjust scale and alpha if landing
+    if (this.landing) {
+      let s = [
+        this.scale.x - PLANE_SPAWN_SIZE * LANDING_SCALE_DOWN * time.deltaTime * this.speed,
+        this.scale.y - PLANE_SPAWN_SIZE * LANDING_SCALE_DOWN * time.deltaTime * this.speed,
+      ];
+      this.scale.set(s[0], s[1]);
+      this.alpha -= LANDING_FADE_OUT * time.deltaTime * this.speed;
+
+      if (this.scale.x < 0.0 || this.scale.x < 0.0) {
+        this.to_delete = true;
+      }
+    }
   }
 
   //TODO call this when used has made a move
@@ -208,7 +230,7 @@ export class Plane extends Sprite {
     this.goal = [0, 0];
     this.goal_direction = get_unit_vector(this.velocity);
 
-    this.scale.set(0.1);
+    this.scale.set(PLANE_SPAWN_SIZE);
 
     // Adding listeners
     this.eventMode = "dynamic";
