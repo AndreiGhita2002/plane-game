@@ -29,14 +29,14 @@ class Main {
 
     const width = window.innerWidth;
     const height = window.innerHeight * 0.9;
-    const container = document.getElementById("pixi-container");
-    // Initialize the application.
-    if(container){
-      await this.app.init({ background: 'transparent',width , height, resizeTo: container});
-    }
 
+    // Initialize the application.
+    const component = document.getElementById("pixi-container")
+    if(component){
+      await this.app.init({width , height, backgroundAlpha: 1, resizeTo: component});
+      component.appendChild(this.app.canvas)
+    }
     // Then adding the application's canvas to the DOM body.
-    document.body.appendChild(this.app.canvas);
     this.addPlane()
     this.addAirport()
     this.addMap()
@@ -44,8 +44,9 @@ class Main {
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
 
-    // Move elements to accommodate for resize
-    window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
+    window.addEventListener("resize", (e) => {
+      console.log("resize")
+    })
   }
 
   mainLoop(time: Ticker) {
@@ -67,14 +68,14 @@ class Main {
 
   addPlane() {
     // push to plane array
-    let plane = new Plane(this.app.screen.width, this.app.screen.height)
+    let plane = new Plane(this.app.canvas.width, this.app.canvas.height)
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
   }
 
   addAirport(){
-    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) =>{
+    airportLocations(this.app.canvas.width,this.app.canvas.height).forEach((coord ) =>{
       let airport = new Airport(coord[0],coord[1], 0.5);
       this.airports.push(airport)
       this.app.stage.addChild(airport);
@@ -82,7 +83,7 @@ class Main {
   }
 
   addMap(){
-    let map = new Map(0,0,this.app.screen.width,this.app.screen.height);
+    let map = new Map(0,0,this.app.canvas.width,this.app.canvas.height);
     this.map = map;
     this.app.stage.addChildAt(map,0);
   }
@@ -92,6 +93,8 @@ class Main {
     //this.planes.forEach((p) => p.resize(new_width, new_height));
     const coords = airportLocations(new_width,new_height);
     this.airports.forEach((value, index) => value.position.set(coords[index][0], coords[index][1]));
+    this.map.width = new_width
+    this.map.height = new_height
   }
 }
 
