@@ -8,7 +8,7 @@ import { sound } from '@pixi/sound';
 // every how many frame(-ish) to spawn a new plane in
 const NEW_PLANE_FREQUENCY = 100;
 // max planes?
-const MAX_NUMBER_OF_PLANES = 10;
+const MAX_NUMBER_OF_PLANES = 7;
 
 export class Main {
   app: Application;
@@ -62,7 +62,7 @@ export class Main {
       // reset new plane cum
       this.new_plane_cum = 0;
       // only spawn the new plane if max number has not been reached
-      if (this.planes.length < MAX_NUMBER_OF_PLANES) {
+      if (this.planes.length < MAX_NUMBER_OF_PLANES-1) {
         this.addPlane();
       }
     }
@@ -81,15 +81,17 @@ export class Main {
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
-    if (this.current_plane == 7) {this.current_plane = 0}
+    if (this.current_plane == 6) {this.current_plane = 0}
     else {this.current_plane += 1;}
   }
 
   addAirport(){
+    let current_airport: number = 0;
     airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) =>{
-      let airport = new Airport(coord[0],coord[1], 0.1, Math.floor(Math.random() * 7));
+      let airport = new Airport(coord[0],coord[1], 0.1, current_airport);
       this.airports.push(airport)
       this.app.stage.addChild(airport);
+      current_airport += 1;
     })
   }
 
