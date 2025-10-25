@@ -33,8 +33,10 @@ export class Main {
     await Airport.preload();
     await Map.preload();
 
+    sound.add('firstflight', '/sounds/first_plane.mp3');
     sound.add('background', '/sounds/background.mp3');
     waitAndPlay(7);
+    sound.play('firstflight');
 
     const width = window.innerWidth;
     const height = window.innerHeight - 220;
