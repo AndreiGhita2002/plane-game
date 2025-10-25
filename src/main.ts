@@ -7,7 +7,7 @@ import {Plane} from "./Plane.ts";
   const app = new Application();
 
   // Preload assets
-  Plane.preload();
+  await Plane.preload();
 
   // Initialize the application.
   await app.init({ background: '#1099bb', resizeTo: window });
