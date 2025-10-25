@@ -29,6 +29,11 @@ export class Plane extends Sprite {
     if (this.y > this.max_x) this.y -= this.max_y;
   }
 
+  resize(new_width: number, new_height: number) {
+    this.max_x = new_width;
+    this.max_y = new_height;
+  }
+
   constructor(max_x: number, max_y: number) {
     super(Plane.plane_texture);
 

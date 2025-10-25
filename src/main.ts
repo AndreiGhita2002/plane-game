@@ -34,6 +34,11 @@ class Main {
     // add to stage.
     this.app.stage.addChild(plane);
   }
+
+  // todo call this from somewhere
+  resize(new_width: number, new_height: number) {
+    this.planes.forEach((p) => p.resize(new_width, new_height));
+  }
 }
 
 // Asynchronous IIFE
