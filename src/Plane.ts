@@ -12,6 +12,15 @@ function dot_product(v1: [number, number], v2: [number, number]): number {
   return v1[0] * v2[0] + v2[1] * v2[1];
 }
 
+function vector_magnitude(v: [number, number]): number {
+  return Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2));
+}
+
+function get_unit_vector(v: [number, number]): [number, number] {
+  let mag = vector_magnitude(v);
+  return [v[0] / mag, v[1] / mag];
+}
+
 
 export class Plane extends Sprite {
   static plane_texture: Texture;
@@ -144,6 +153,6 @@ export class Plane extends Sprite {
     }
     this.pathfind_mode = 0;
     this.goal = [0, 0];
-    this.goal_direction = [Math.sin(angle), Math.cos(angle)];
+    this.goal_direction = get_unit_vector(this.velocity);
   }
 }
