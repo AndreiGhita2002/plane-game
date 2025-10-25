@@ -1,9 +1,10 @@
 import {Assets, Sprite, Texture, Ticker} from 'pixi.js';
 import {getRandomInt} from "./util/random.ts";
+import {Main} from "./main.ts";
 
 const PLANE_URL = 'https://pixijs.com/assets/bunny.png';
 const PLANE_MIN_SPAWN_SPEED = 1;
-const PLANE_MAX_SPAWN_SPEED = 5;
+const PLANE_MAX_SPAWN_SPEED = 3;
 const TURNING_SPEED = 2; // in radians for some reason
 const CLOSE_ENOUGH_DOT = 0.1;
 const SIN_INCREMENT = 0.05;
@@ -61,7 +62,7 @@ export class Plane extends Sprite {
       if (this.x < 0) this.to_delete = true;
       if (this.y < 0) this.to_delete = true;
       if (this.x > this.max_x) this.to_delete = true;
-      if (this.y > this.max_x) this.to_delete = true;
+      if (this.y > this.max_y) this.to_delete = true;
       if (this.to_delete) {
         this.destroy();
         return;
@@ -124,6 +125,7 @@ export class Plane extends Sprite {
   constructor(max_x: number, max_y: number) {
     super(Plane.plane_texture);
 
+    this.anchor.set(0.5);
     this.max_x = max_x;
     this.max_y = max_y;
 
@@ -173,5 +175,14 @@ export class Plane extends Sprite {
     this.pathfind_mode = 0;
     this.goal = [0, 0];
     this.goal_direction = get_unit_vector(this.velocity);
+
+    // Adding listeners
+    this.eventMode = "dynamic";
+    this.cursor = "pointer";
+
+    this.onpointerdown = (_event) => {
+      Main.selected_plane = this;
+      console.log("Plane has been selected!");
+    };
   }
 }

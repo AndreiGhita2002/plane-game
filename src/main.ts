@@ -9,13 +9,15 @@ const NEW_PLANE_FREQUENCY = 100;
 // max planes?
 const MAX_NUMBER_OF_PLAINS = 10;
 
-class Main {
+export class Main {
   app: Application;
   planes: Plane[] = [];
   airports: Airport[] =[];
   // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
+
+  static selected_plane: Plane | null = null;
 
   constructor() {
     this.app = new Application()
@@ -46,6 +48,15 @@ class Main {
 
     // Move elements to accommodate for resize
     window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
+
+    // listener for release:
+    // this.app.stage.eventMode = "static";
+    // this.app.stage.cursor = "pointer";
+
+    // this.app.stage.onpointerup = (_event) => {
+    //   Main.selected_plane = null;
+    //   console.log("Plane deselected");
+    // };
   }
 
   mainLoop(time: Ticker) {
@@ -67,7 +78,8 @@ class Main {
 
   addPlane() {
     // push to plane array
-    let plane = new Plane(this.app.screen.width, this.app.screen.height)
+    let plane = new Plane(this.app.screen.width, this.app.screen.height);
+
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);

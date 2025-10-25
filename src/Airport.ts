@@ -1,6 +1,7 @@
 import {Assets, Sprite, Texture} from 'pixi.js';
+import {Main} from "./main.ts";
 
-export class Airport extends Sprite{
+export class Airport extends Sprite {
 
     static airport_texture : Texture;
     static async preload(){
@@ -11,6 +12,21 @@ export class Airport extends Sprite{
        this.scale.set(scale)
        this.position.set(x,y)
 
+      // Adding listeners
+      this.eventMode = "dynamic";
+      this.cursor = "pointer";
+
+      this.onpointerup = (_event) => {
+        if (Main.selected_plane) {
+          // todo if plane and airport match
+          console.log("Plane is released!")
+
+          Main.selected_plane.change_path(this.x, this.y);
+          Main.selected_plane = null;
+        } else {
+          console.log(" released on airport without plane!")
+        }
+      };
     }
 
 }
