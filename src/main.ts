@@ -44,8 +44,8 @@ class Main {
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
 
-    // Move elements to accommodate for resize
-    window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
+    // Move elements to accommodate for resize NO
+    // window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
   }
 
   mainLoop(time: Ticker) {
