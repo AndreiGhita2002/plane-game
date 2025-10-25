@@ -44,8 +44,9 @@ class Main {
       }
     }
 
-    // Plane update
-    this.planes.forEach((p) => p.update(time));
+    // Plane update and deletions
+    this.planes.forEach((plane) => plane.update(time))
+    this.planes = this.planes.filter((p) => !p.to_delete);
   }
 
   addPlane() {
@@ -66,5 +67,5 @@ class Main {
 (async () => {
   // Create a PixiJS application.
   let main = new Main();
-  main.run();
+  await main.run();
 })();
