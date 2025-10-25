@@ -4,7 +4,7 @@ export class Airport extends Sprite{
 
     static airport_texture : Texture;
     static async preload(){
-        Airport.airport_texture = await Assets.load("sprite/airport.svg");
+        Airport.airport_texture = await Assets.load("sprite/airport.svg", {resolution: 4});
     }
     constructor(x: number, y: number, scale:number){
        super(Airport.airport_texture);
