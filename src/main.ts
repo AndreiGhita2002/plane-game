@@ -1,4 +1,4 @@
-import {Application, Ticker} from 'pixi.js';
+import {Application, Ticker, RenderLayer} from 'pixi.js';
 import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
 import {airportLocations} from "./Airport-locations.ts";
@@ -7,6 +7,8 @@ import {airportLocations} from "./Airport-locations.ts";
 const NEW_PLANE_FREQUENCY = 100;
 // max planes?
 const MAX_NUMBER_OF_PLAINS = 10;
+
+let foregroundLayer = new RenderLayer();
 
 class Main {
   app: Application;
@@ -30,9 +32,10 @@ class Main {
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(this.app.canvas);
+    this.app.stage.addChild(foregroundLayer);
 
-    this.addPlane();
-    this.addAirport();
+    this.addPlane(foregroundLayer, 1);
+    this.addAirport(foregroundLayer, 0);
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
@@ -46,7 +49,7 @@ class Main {
       this.new_plane_cum = 0;
       // only spawn the new plane if max number has not been reached
       if (this.planes.length < MAX_NUMBER_OF_PLAINS) {
-        this.addPlane()
+        this.addPlane(foregroundLayer, 1)
       }
     }
 
@@ -55,18 +58,18 @@ class Main {
     this.planes = this.planes.filter((p) => !p.to_delete);
   }
 
-  addPlane() {
+  addPlane(layer : RenderLayer, zindex: number) {
     // push to plane array
     let plane = new Plane(this.app.screen.width, this.app.screen.height)
     this.planes.push(plane);
     // add to stage.
-    this.app.stage.addChild(plane);
+    layer.addChildAt(plane,zindex);
   }
-  addAirport(){
+  addAirport(layer: RenderLayer, zindex: number){
     airportLocations(screen.width,screen.height).forEach((coord ) =>{
       let airport = new Airport(coord[0],coord[1], 0.5);
       this.airports.push(airport)
-      this.app.stage.addChild(airport);
+      layer.addChildAt(airport, zindex);
     })
   }
   // todo call this from somewhere
