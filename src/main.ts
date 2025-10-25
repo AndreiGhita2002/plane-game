@@ -1,6 +1,7 @@
 import {Application, Ticker} from 'pixi.js';
 import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
+import {airportLocations} from "./Airport-locations.ts";
 
 // every how many frame(-ish) to spawn a new plane in
 const NEW_PLANE_FREQUENCY = 100;
@@ -62,16 +63,11 @@ class Main {
     this.app.stage.addChild(plane);
   }
   addAirport(){
-    const screen_bounds_max : number[] = [this.app.screen.width, this.app.screen.height];
-    const screen_bounds_min : number[] = [0,0]
-    const getRandom = (min : number, max : number):number =>{
-      return Math.random() * (max-min) + min;
-    }
-
-    const location : number[] = [getRandom(screen_bounds_min[0], screen_bounds_max[0]), getRandom(screen_bounds_min[1], screen_bounds_max[1])];
-    let airport = new Airport(location[0],location[1], 0.5);
-    this.airports.push(airport)
-    this.app.stage.addChild(airport);
+    airportLocations(screen.width,screen.height).forEach((coord ) =>{
+      let airport = new Airport(coord[0],coord[1], 0.5);
+      this.airports.push(airport)
+      this.app.stage.addChild(airport);
+    })
   }
   // todo call this from somewhere
   resize(new_width: number, new_height: number) {
