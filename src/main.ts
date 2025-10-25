@@ -18,6 +18,8 @@ export class Main {
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
   current_plane = 0;
+  static score: number = 0;
+  static lives: number = 3;
 
   static selected_plane: Plane | null = null;
 

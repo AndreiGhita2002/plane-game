@@ -27,16 +27,15 @@ export class Airport extends Sprite {
 
       this.onpointerup = (_event) => {
         if (Main.selected_plane && !Main.selected_plane.destroyed) {
-          // todo if plane and airport match
           if (this.colour == Main.selected_plane.colour) {
             console.log("They match!")
-            //todo Increment score
+            Main.score += 1;
           }
           else {
-            //todo lower score
+            Main.lives -=1;
           }
 
-          console.log("Plane is released!")
+          // todo make planes descend
 
           Main.selected_plane.change_path(this.x, this.y);
           Main.selected_plane = null;
