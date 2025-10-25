@@ -55,7 +55,10 @@ export class Plane extends Sprite {
       if (this.y < 0) this.to_delete = true;
       if (this.x > this.max_x) this.to_delete = true;
       if (this.y > this.max_x) this.to_delete = true;
-      if (this.to_delete) return;
+      if (this.to_delete) {
+        this.destroy();
+        return;
+      }
 
       // calculate next position on the sine wave
       // todo sin wave motion of planes
