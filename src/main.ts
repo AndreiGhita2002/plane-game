@@ -77,7 +77,7 @@ export class Main {
   addPlane() {
 
     // push to plane array
-    let plane = new Plane(this.app.screen.width, this.app.screen.height, this.current_plane)
+    let plane = new Plane(this.app.screen.width + 40, this.app.screen.height + 40, this.current_plane)
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
