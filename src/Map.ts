@@ -12,5 +12,6 @@ export class Map extends Sprite{
         this.position.set(x, y);
         this.width = width;
         this.height = height;
+        this.zIndex = 0;
     }
 }
