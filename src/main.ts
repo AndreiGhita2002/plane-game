@@ -57,6 +57,8 @@ export class Main {
     this.addPlane()
     this.app.stage.addChild(this.scoreBoard);
 
+    this.app.stage.sortableChildren = true;
+
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
 
@@ -87,13 +89,12 @@ export class Main {
   // todo LINK PLANES AND AIRPORTS
 
   addPlane() {
-
     // push to plane array
     let plane = new Plane(this.app.screen.width + 40, this.app.screen.height + 40, this.current_plane)
     this.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
-    if (this.current_plane == 6) {this.current_plane = 0}
+    if (this.current_plane == 6) {this.current_plane = 0} // holy hard-coding
     else {this.current_plane += 1;}
   }
 
@@ -108,9 +109,8 @@ export class Main {
   }
 
   addMap(){
-    let map = new Map(0,0,this.app.screen.width,this.app.screen.height);
-    this.map = map;
-    this.app.stage.addChildAt(map,0);
+    this.map = new Map(0,0,this.app.screen.width,this.app.screen.height);
+    this.app.stage.addChildAt(this.map, 0);
   }
 
   // todo call this from somewhere

@@ -158,6 +158,9 @@ export class Plane extends Sprite {
     // set rotation
     this.rotation = vector_angle(this.velocity) + Math.PI / 2.0;
 
+    // z index
+    this.zIndex = 10 + this.colour;
+
     // adjust scale and alpha if landing
     if (this.landing) {
       let s = [

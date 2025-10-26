@@ -43,6 +43,7 @@ export class ScoreBoard extends Container {
     super();
     this.x = 10; //Top left
     this.y = 10;
+    this.zIndex = 20;
 
     this.last_score = 10; // set to a crazy value so it updates right away
     this.last_lives = 10;

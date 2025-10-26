@@ -20,6 +20,7 @@ export class Airport extends Sprite {
        this.scale.set(scale);
        this.position.set(x,y);
        this.anchor.set(0.5);
+       this.zIndex = 2 + color;
 
       // Adding listeners
       this.eventMode = "dynamic";
