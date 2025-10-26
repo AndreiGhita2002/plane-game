@@ -20,13 +20,16 @@ const textStyle = new TextStyle({
 });
 
 const defaultGraphics = new Graphics()
-  .rect(0, 0, 200, 100)
-  .fill('red');
+  .rect(0, 0, window.innerWidth, (window.innerHeight - 150))
+  .fill({
+    color: '#272727',
+    alpha: 0.3,
+  });
 
 
 const button = new FancyButton({
   defaultView: defaultGraphics,
-  text: "Click to retry"
+  text: "Click to play again..."
 })
 
 export class ScoreBoard extends Container {
@@ -78,13 +81,14 @@ export class ScoreBoard extends Container {
 
     this.text.x = 10; //Top left
     this.text.y = 10;
-    button.x = 600; //todo hardcode for presentation screen
-    button.y = 200;
+    button.x = -10; //todo hardcode for presentation screen
+    button.y = -50;
 
     this.last_score = 10; // set to a crazy value so it updates right away
     this.last_lives = 10;
 
     this.addChild(this.text);
+    // this.addChild(button);
     // button.visible = false;
 
   }
