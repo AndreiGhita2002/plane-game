@@ -2,7 +2,7 @@ import {Container, TextStyle, HTMLText, Graphics} from "pixi.js";
 import {FancyButton} from '@pixi/ui';
 import {Main} from "./main.ts";
 
-const textStyle = new TextStyle({ // TODO Make scoreboard style pretty
+const textStyle = new TextStyle({
   fontFamily: 'Helvetica',
   fontSize: '36px',
   fill: '#ffffff',
@@ -48,9 +48,7 @@ export class ScoreBoard extends Container {
       // Redraw text
       this.text.text = `Score: ${Main.score}<br><span> ${live_str} </span>`;
     }
-    if (Main.lives == 0 && this.first_time==true) {
-      // todo add restart button
-
+    if (Main.lives == 0 && this.first_time) {
       this.addChild(button)
       // button.visible = true;
       console.log("HERE")

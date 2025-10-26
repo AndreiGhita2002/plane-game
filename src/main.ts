@@ -91,8 +91,6 @@ export class Main {
     }
   }
 
-  // todo LINK PLANES AND AIRPORTS
-
   addPlane() {
     // push to plane array
     let plane = new Plane(Main.app.screen.width + 40, Main.app.screen.height + 40, this.current_plane)
@@ -141,7 +139,6 @@ export class Main {
     this.score = 0;
     this.planes.forEach((p) => p.destroy())
     this.planes = [];
-    // todo clear all current planes
   }
 
   // todo call this from somewhere
