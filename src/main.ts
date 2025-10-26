@@ -36,12 +36,14 @@ export class Main {
     await Map.preload();
 
     sound.add('firstflight', '/sounds/first_plane.mp3');
+    sound.add('takeoff', '/sounds/takeoff.mp3');
     sound.add('background', '/sounds/background.mp3');
     waitAndPlay(7);
     sound.play('firstflight');
+    sound.play('takeoff', {volume: 0.3});
 
     const width = window.innerWidth;
-    const height = window.innerHeight - 220;
+    const height = window.innerHeight - 200;
     const container = document.getElementById("pixi-container");
     // Initialize the application.
     if(container){

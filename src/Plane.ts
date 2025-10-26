@@ -1,6 +1,7 @@
 import {Assets, Sprite, Texture, Ticker} from 'pixi.js';
 import {getRandomInt} from "./util/random.ts";
 import {Main} from "./main.ts";
+import {sound} from "@pixi/sound";
 
 const PLANE_MIN_SPAWN_SPEED = 0.7;
 const PLANE_MAX_SPAWN_SPEED = 1.8;
@@ -71,6 +72,10 @@ export class Plane extends Sprite {
     for (let i = 0; i < 7; i++) {
       Plane.plane_textures[i] = await Assets.load(`/sprite/planes/${i}.svg`);
     }
+    sound.add('chime0', '/sounds/chime.mp3');
+    sound.add('chime1', '/sounds/chime1.mp3');
+    sound.add('chime2', '/sounds/chime2.mp3');
+    sound.add('miss', '/sounds/miss.mp3');
   }
 
   update(time: Ticker) {
@@ -85,6 +90,8 @@ export class Plane extends Sprite {
       if (this.to_delete) {
         this.destroy();
         Main.lives -= 1;
+
+        sound.play('miss');
         return;
       }
 
@@ -163,6 +170,8 @@ export class Plane extends Sprite {
       if (this.scale.x < 0.0 || this.scale.x < 0.0) {
         this.to_delete = true;
         Main.score += 1;
+
+        sound.play(`chime${Math.floor(Math.random() * 2)}`);
       }
     }
   }
