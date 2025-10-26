@@ -36,6 +36,9 @@ export class Airport extends Sprite {
 
           Main.selected_plane.change_path(this.x, this.y);
           Main.selected_plane = null;
+
+          Main.destroySelectors();
+
         } else {
           console.log(" released on airport without plane!")
         }

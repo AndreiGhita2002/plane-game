@@ -278,6 +278,7 @@ export class Plane extends Sprite {
     this.onpointerdown = (_event) => {
       Main.selected_plane = this;
       console.log("Plane has been selected!");
+      Main.addSelectors();
     };
   }
 }

@@ -12,7 +12,7 @@ const NEW_PLANE_FREQUENCY = 100;
 const MAX_NUMBER_OF_PLANES = 7;
 
 export class Main {
-  app: Application;
+  static app: Application;
   static selectors: Graphics[] = [];
   static planes: Plane[] = [];
   static airports: Airport[] = [];
@@ -27,7 +27,7 @@ export class Main {
   static selected_plane: Plane | null = null;
 
   constructor() {
-    this.app = new Application()
+    Main.app = new Application()
   }
 
   async run() {
@@ -48,22 +48,22 @@ export class Main {
     const container = document.getElementById("pixi-container");
     // Initialize the application.
     if(container){
-      await this.app.init({ backgroundAlpha: 0.1, background: 'transparent',  width , height, resizeTo: container});
+      await Main.app.init({ backgroundAlpha: 0.1, background: 'transparent',  width , height, resizeTo: container});
     }
 
     // Then adding the application's canvas to the DOM body.
-    document.body.appendChild(this.app.canvas);
+    document.body.appendChild(Main.app.canvas);
     this.addMap()
     this.addAirports()
-    this.addSelectors()
-    this.destroySelectors()
+    Main.addSelectors()
+    Main.destroySelectors()
     this.addPlane()
-    this.app.stage.addChild(this.scoreBoard);
+    Main.app.stage.addChild(this.scoreBoard);
 
-    this.app.stage.sortableChildren = true;
+    Main.app.stage.sortableChildren = true;
 
     // Add an animation loop callback to the application's ticker.
-    this.app.ticker.add(t => this.mainLoop(t));
+    Main.app.ticker.add(t => this.mainLoop(t));
 
     // Move elements to accommodate for resize NOOOO
     // window.addEventListener("resize", () => {this.resize(window.innerWidth, (window.innerHeight * 0.9))});
@@ -95,29 +95,29 @@ export class Main {
 
   addPlane() {
     // push to plane array
-    let plane = new Plane(this.app.screen.width + 40, this.app.screen.height + 40, this.current_plane)
+    let plane = new Plane(Main.app.screen.width + 40, Main.app.screen.height + 40, this.current_plane)
     Main.planes.push(plane);
     // add to stage.
-    this.app.stage.addChild(plane);
+    Main.app.stage.addChild(plane);
     if (this.current_plane == 6) {this.current_plane = 0} // holy hard-coding
     else {this.current_plane += 1;}
   }
 
   addAirports(){
     let current_airport: number = 0;
-    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) => {
+    airportLocations(Main.app.screen.width,Main.app.screen.height).forEach((coord ) => {
       let airport = new Airport(coord[0],coord[1], 0.1, current_airport);
       Main.airports.push(airport)
-      this.app.stage.addChild(airport);
+      Main.app.stage.addChild(airport);
       current_airport += 1;
     })
   }
 
-  public addSelectors(){
+  public static addSelectors(){
     // this.app.stage.addChild(g);
     let current_airport: number = 0;
     let colours: number[] = [0x3905ff, 0x18ff00, 0x1ad1e8, 0xff00b2, 0xf800ff, 0xcc0012, 0xffffff];
-    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) => {
+    airportLocations(Main.app.screen.width,Main.app.screen.height).forEach((coord ) => {
       // let airport = new Airport(coord[0],coord[1], 0.1, current_airport);
       let selector = new Graphics().circle(coord[0],coord[1], 35).fill(colours[current_airport]).circle(coord[0],coord[1], 30).cut();
       Main.selectors.push(selector)
@@ -126,14 +126,14 @@ export class Main {
     })
   }
 
-  public destroySelectors() {
+  public static destroySelectors() {
     Main.selectors.forEach((selector) => selector.destroy());
     Main.selectors = [];
   }
 
   addMap(){
-    this.map = new Map(0,0,this.app.screen.width,this.app.screen.height);
-    this.app.stage.addChildAt(this.map, 0);
+    this.map = new Map(0,0,Main.app.screen.width,Main.app.screen.height);
+    Main.app.stage.addChildAt(this.map, 0);
   }
 
   static reset(){
