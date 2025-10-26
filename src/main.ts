@@ -1,4 +1,4 @@
-import {Application, Ticker} from 'pixi.js';
+import {Application, Graphics, Ticker} from 'pixi.js';
 import { Plane } from "./Plane.ts";
 import {Airport} from "./Airport.ts";
 import {Map} from "./Map.ts";
@@ -14,6 +14,7 @@ const MAX_NUMBER_OF_PLANES = 7;
 export class Main {
   app: Application;
   planes: Plane[] = [];
+  static selectors: Graphics[] = [];
   static airports: Airport[] = [];
   // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
@@ -54,6 +55,8 @@ export class Main {
     document.body.appendChild(this.app.canvas);
     this.addMap()
     this.addAirports()
+    this.addSelectors()
+    this.destroySelectors()
     this.addPlane()
     this.app.stage.addChild(this.scoreBoard);
 
@@ -106,6 +109,24 @@ export class Main {
       this.app.stage.addChild(airport);
       current_airport += 1;
     })
+  }
+
+  public addSelectors(){
+    // this.app.stage.addChild(g);
+    let current_airport: number = 0;
+    let colours: number[] = [0x3905ff, 0x18ff00, 0x1ad1e8, 0xff00b2, 0xf800ff, 0xcc0012, 0xffffff];
+    airportLocations(this.app.screen.width,this.app.screen.height).forEach((coord ) => {
+      // let airport = new Airport(coord[0],coord[1], 0.1, current_airport);
+      let selector = new Graphics().circle(coord[0],coord[1], 35).fill(colours[current_airport]).circle(coord[0],coord[1], 30).cut();
+      Main.selectors.push(selector)
+      this.app.stage.addChild(selector);
+      current_airport += 1;
+    })    
+  }
+
+  public destroySelectors() {
+    Main.selectors.forEach((selector) => selector.destroy());
+    Main.selectors = [];
   }
 
   addMap(){
