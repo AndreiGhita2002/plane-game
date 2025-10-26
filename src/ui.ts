@@ -2,16 +2,18 @@ import {Container, TextStyle, HTMLText} from "pixi.js";
 import {Main} from "./main.ts";
 
 const textStyle = new TextStyle({ // TODO Make scoreboard style pretty
-  fontFamily: 'Arial',
-  fontSize: 30,
+  fontFamily: 'Helvetica',
+  fontSize: '36px',
   fill: '#ffffff',
-  stroke: '#000000',
-  // strokeThickness: 3, (does not exist apparently)
+  stroke: {
+    color: `#000000`,
+    width: 4,
+  },
   dropShadow: {
     color: '#000000',
     blur: 5,
-    distance: 4,
-    angle: Math.PI / 4,
+    distance: 3,
+    angle: 2 * Math.PI / 3,
     alpha: 0.5,
   },
 });
