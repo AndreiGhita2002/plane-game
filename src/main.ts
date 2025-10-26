@@ -4,6 +4,7 @@ import {Airport} from "./Airport.ts";
 import {Map} from "./Map.ts";
 import {airportLocations} from "./Airport-locations.ts";
 import { sound } from '@pixi/sound';
+import {ScoreBoard} from "./ui.ts";
 
 // every how many frame(-ish) to spawn a new plane in
 const NEW_PLANE_FREQUENCY = 100;
@@ -18,6 +19,7 @@ export class Main {
   map : Map; // shows error cause not initialised. Don't care :)
   new_plane_cum = 0;
   current_plane = 0;
+  scoreBoard: ScoreBoard = new ScoreBoard();
   static score: number = 0;
   static lives: number = 3;
 
@@ -51,6 +53,7 @@ export class Main {
     this.addMap()
     this.addAirports()
     this.addPlane()
+    this.app.stage.addChild(this.scoreBoard);
 
     // Add an animation loop callback to the application's ticker.
     this.app.ticker.add(t => this.mainLoop(t));
@@ -74,6 +77,9 @@ export class Main {
     // Plane update and deletions
     this.planes.forEach((plane) => plane.update(time))
     this.planes = this.planes.filter((p) => !p.to_delete);
+
+    // UI updates
+    this.scoreBoard.update();
   }
 
   // todo LINK PLANES AND AIRPORTS
