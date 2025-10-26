@@ -5,6 +5,7 @@ import {sound} from "@pixi/sound";
 
 const PLANE_MIN_SPAWN_SPEED = 0.7;
 const PLANE_MAX_SPAWN_SPEED = 1.8;
+const SPAWN_DISTANCE = 10; // how far from world border should planes spawn
 const SIN_INCREMENT = 0.05;
 const SIN_WAVELENGTH = 0.3;
 const GOAL_SPEEDUP = 2.5;
@@ -228,14 +229,14 @@ export class Plane extends Sprite {
       // north
       let base = max_y / Math.tan(angle_limit)
       this.x = getRandomInt(base, max_x - base);
-      this.y = 0;
+      this.y = SPAWN_DISTANCE;
 
       this.velocity = [Math.cos(angle) * this.speed, Math.sin(angle) * this.speed];
     }
     if (edge == 1) {
       // east
       let base = max_x / Math.tan(angle_limit)
-      this.x = max_x
+      this.x = max_x - SPAWN_DISTANCE;
       this.y = getRandomInt(base, max_y - base);
 
       this.velocity = [-Math.sin(angle) * this.speed, Math.cos(angle) * this.speed];
@@ -244,14 +245,14 @@ export class Plane extends Sprite {
       // south
       let base = max_y / Math.tan(angle_limit)
       this.x = getRandomInt(base, max_x - base);
-      this.y = max_y;
+      this.y = max_y - SPAWN_DISTANCE;
 
       this.velocity = [Math.cos(angle) * this.speed, -Math.sin(angle) * this.speed];
     }
     if (edge == 3) {
       // west
       let base = max_x / Math.tan(angle_limit)
-      this.x = 0;
+      this.x = SPAWN_DISTANCE;
       this.y = getRandomInt(base, max_y - base);
 
       this.velocity = [Math.sin(angle) * this.speed, Math.cos(angle) * this.speed];
