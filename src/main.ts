@@ -13,7 +13,7 @@ const MAX_NUMBER_OF_PLANES = 7;
 
 export class Main {
   app: Application;
-  planes: Plane[] = [];
+  static planes: Plane[] = [];
   static airports: Airport[] = [];
   // @ts-ignore
   map : Map; // shows error cause not initialised. Don't care :)
@@ -65,23 +65,30 @@ export class Main {
   }
 
   mainLoop(time: Ticker) {
-    // New planes
-    this.new_plane_cum += time.deltaTime;
-    if (this.new_plane_cum > NEW_PLANE_FREQUENCY) {
-      // reset new plane cum
-      this.new_plane_cum = 0;
-      // only spawn the new plane if max number has not been reached
-      if (this.planes.length < MAX_NUMBER_OF_PLANES-1) {
-        this.addPlane();
+    if (Main.lives > 0) { //Game plays
+      // New planes
+      this.new_plane_cum += time.deltaTime;
+      if (this.new_plane_cum > NEW_PLANE_FREQUENCY) {
+        // reset new plane cum
+        this.new_plane_cum = 0;
+        // only spawn the new plane if max number has not been reached
+        if (Main.planes.length < MAX_NUMBER_OF_PLANES - 1) {
+          this.addPlane();
+        }
       }
+
+      // Plane update and deletions
+      Main.planes.forEach((plane) => plane.update(time))
+      Main.planes = Main.planes.filter((p) => !p.to_delete);
+
+      // UI updates
+      this.scoreBoard.update();
+    } else { // You lose
+      // // todo add ui and wait
+      // console.log("You lose");
+      // // Main.lives = 3;
+      // // Main.score = 0;
     }
-
-    // Plane update and deletions
-    this.planes.forEach((plane) => plane.update(time))
-    this.planes = this.planes.filter((p) => !p.to_delete);
-
-    // UI updates
-    this.scoreBoard.update();
   }
 
   // todo LINK PLANES AND AIRPORTS
@@ -90,7 +97,7 @@ export class Main {
 
     // push to plane array
     let plane = new Plane(this.app.screen.width + 40, this.app.screen.height + 40, this.current_plane)
-    this.planes.push(plane);
+    Main.planes.push(plane);
     // add to stage.
     this.app.stage.addChild(plane);
     if (this.current_plane == 6) {this.current_plane = 0}
@@ -111,6 +118,14 @@ export class Main {
     let map = new Map(0,0,this.app.screen.width,this.app.screen.height);
     this.map = map;
     this.app.stage.addChildAt(map,0);
+  }
+
+  static reset(){
+    this.lives = 3;
+    this.score = 0;
+    this.planes.forEach((p) => p.destroy())
+    this.planes = [];
+    // todo clear all current planes
   }
 
   // todo call this from somewhere

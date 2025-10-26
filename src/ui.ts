@@ -1,4 +1,5 @@
-import {Container, TextStyle, HTMLText} from "pixi.js";
+import {Container, TextStyle, HTMLText, Graphics} from "pixi.js";
+import {FancyButton} from '@pixi/ui';
 import {Main} from "./main.ts";
 
 const textStyle = new TextStyle({ // TODO Make scoreboard style pretty
@@ -18,11 +19,21 @@ const textStyle = new TextStyle({ // TODO Make scoreboard style pretty
   },
 });
 
+const defaultGraphics = new Graphics()
+  .rect(0, 0, 200, 100)
+  .fill('red');
+
+
+const button = new FancyButton({
+  defaultView: defaultGraphics,
+  text: "Click to retry"
+})
+
 export class ScoreBoard extends Container {
   last_score: number;
   last_lives: number;
   text: HTMLText;
-
+  first_time:boolean = true;
   update() {
     // only update the text if required
     if (this.last_score != Main.score || this.last_lives != Main.lives) {
@@ -37,19 +48,41 @@ export class ScoreBoard extends Container {
       // Redraw text
       this.text.text = `Score: ${Main.score}<br><span> ${live_str} </span>`;
     }
+    if (Main.lives == 0 && this.first_time==true) {
+      // todo add restart button
+
+      this.addChild(button)
+      // button.visible = true;
+      console.log("HERE")
+      button.onPress.connect(() => {
+        Main.reset();
+        this.removeChild(button)
+        this.first_time = true;
+      });
+      // button.visible = false;
+      // this.removeChild(button)
+      this.first_time = false;
+    }
   }
 
   constructor() {
     super();
-    this.x = 10; //Top left
-    this.y = 10;
 
-    this.last_score = 10; // set to a crazy value so it updates right away
-    this.last_lives = 10;
     this.text = new HTMLText({
       text: "...",
       style: textStyle,
     });
+
+    this.text.x = 10; //Top left
+    this.text.y = 10;
+    button.x = 600; //todo hardcode for presentation screen
+    button.y = 200;
+
+    this.last_score = 10; // set to a crazy value so it updates right away
+    this.last_lives = 10;
+
     this.addChild(this.text);
+    // button.visible = false;
+
   }
 }
