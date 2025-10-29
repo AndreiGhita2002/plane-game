@@ -11,6 +11,6 @@ Game is built using the Pixi.js library. Overall look of the game was design to 
 ## Team Members:
 - [Andrei I. Ghita](https://github.com/AndreiGhita2002)
 - Fraser
-- Nour
+- [Nour Elfangary](https://github.com/nour2063)
 - Lily
 - Nyx
