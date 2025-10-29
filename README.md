@@ -13,4 +13,4 @@ Game is built using the Pixi.js library. Overall look of the game was design to 
 - Fraser
 - [Nour Elfangary](https://github.com/nour2063)
 - Lily
-- Nyx
+- [Nyx Douglas](https://github.com/NearlyDragonss)
