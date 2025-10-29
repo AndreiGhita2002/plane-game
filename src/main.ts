@@ -49,10 +49,14 @@ export class Main {
     // Initialize the application.
     if(container){
       await Main.app.init({ backgroundAlpha: 0.1, background: 'transparent',  width , height, resizeTo: container});
+
+      // Then adding the application's canvas to the DOM body.
+      document.body.appendChild(Main.app.canvas);
+
+    } else {
+      console.error("Could not find the pixi-container element.");
     }
 
-    // Then adding the application's canvas to the DOM body.
-    document.body.appendChild(Main.app.canvas);
     this.addMap()
     this.addAirports()
     Main.addSelectors()
