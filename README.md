@@ -12,5 +12,5 @@ Game is built using the Pixi.js library. Overall look of the game was design to 
 - [Andrei I. Ghita](https://github.com/AndreiGhita2002)
 - Fraser
 - [Nour Elfangary](https://github.com/nour2063)
-- Lily
+- [Lily Fleeting-Craig](https://github.com/lilyfleetingcraig)
 - [Nyx Douglas](https://github.com/NearlyDragonss)
