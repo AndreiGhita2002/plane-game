@@ -2,6 +2,8 @@
 
 Oh no! A storm has confused plane pilots from around the world! You have been tasked with ensuring the planes still reach their destination.
 
+Play it here: https://plane-game-delta.vercel.app/
+
 Small game for error pages on a booking website. Send planes that come on screen to their destination, by clicking on the plane and then on the destination (marked by circles on the map). Make sure the colour of the plane matches the destination!
 
 Winner of Free to Book's challenge from 'Do you have the GUTS?' 2025 hackathon.
